@@ -240,8 +240,32 @@ CREATE TABLE IF NOT EXISTS hr_settings (
 -- INSERT INTO hr_settings(company_id, key, value) VALUES (1, 'send_payslip_email', 'false');
 
 -- ============================================
--- Default Super Admin (change password after first login!)
--- Password: Admin@123 (bcrypt hash)
+-- 14. TASKS
 -- ============================================
--- INSERT INTO users(name, email, password, role) 
--- VALUES ('Super Admin', 'admin@sjdhrms.com', '$2a$10$...hash...', 'super_admin');
+CREATE TABLE IF NOT EXISTS tasks (
+  id          SERIAL PRIMARY KEY,
+  company_id  INT NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  title       VARCHAR(255) NOT NULL,
+  description TEXT,
+  assigned_to INT REFERENCES employees(id),
+  assigned_by INT REFERENCES employees(id),
+  due_date    DATE,
+  status      VARCHAR(30) DEFAULT 'not_started' CHECK (status IN ('not_started','partially_complete','complete')),
+  created_at  TIMESTAMP DEFAULT NOW(),
+  updated_at  TIMESTAMP DEFAULT NOW()
+);
+
+-- ============================================
+-- 15. DAILY PROGRESS REPORTS (DPR)
+-- ============================================
+CREATE TABLE IF NOT EXISTS dpr (
+  id          SERIAL PRIMARY KEY,
+  company_id  INT NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  employee_id INT NOT NULL REFERENCES employees(id),
+  date        DATE NOT NULL,
+  report_text TEXT NOT NULL,
+  manager_id  INT REFERENCES employees(id),
+  created_at  TIMESTAMP DEFAULT NOW(),
+  UNIQUE(employee_id, date)
+);
+

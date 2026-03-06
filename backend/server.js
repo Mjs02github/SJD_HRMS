@@ -58,11 +58,15 @@ const companyRoutes = require('./routes/companies');
 const employeeRoutes = require('./routes/employees');
 const attendanceRoutes = require('./routes/attendance');
 const payrollRoutes = require('./routes/payroll');
+const taskRoutes = require('./routes/tasks');
+const dprRoutes = require('./routes/dpr');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/companies', companyRoutes);
 app.use('/api/companies/:companyId/employees', employeeRoutes);
 app.use('/api/companies/:companyId/attendance', attendanceRoutes);
+app.use('/api/companies/:companyId/tasks', taskRoutes);
+app.use('/api/companies/:companyId/dpr', dprRoutes);
 app.use('/api/companies/:companyId', payrollRoutes);
 
 // ── Health check ─────────────────────────────────────────
