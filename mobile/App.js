@@ -8,6 +8,9 @@ import { View, ActivityIndicator } from 'react-native';
 import LoginScreen from './src/screens/Auth/LoginScreen';
 import EmployeeDashboard from './src/screens/Dashboard/EmployeeDashboard';
 import SelfieAttendanceScreen from './src/screens/Attendance/SelfieAttendanceScreen';
+import LeaveApplicationScreen from './src/screens/Leave/LeaveApplicationScreen';
+import DPRScreen from './src/screens/Tasks/DPRScreen';
+import SalaryDetailsScreen from './src/screens/Payroll/SalaryDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +70,21 @@ export default function App() {
               name="SelfieAttendance"
               component={SelfieAttendanceScreen}
               options={{ presentation: 'fullScreenModal' }}
+            />
+            <Stack.Screen
+              name="LeaveApplication"
+              component={LeaveApplicationScreen}
+              options={{ title: 'Leave Application', headerShown: true }}
+            />
+            <Stack.Screen
+              name="DPR"
+              component={DPRScreen}
+              options={{ title: 'Daily Progress Report', headerShown: true }}
+            />
+            <Stack.Screen
+              name="Salary"
+              component={SalaryDetailsScreen}
+              options={{ title: 'Payslips', headerShown: true }}
             />
           </Stack.Group>
         ) : (
