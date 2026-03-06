@@ -43,17 +43,61 @@ export default function AdminDashboard() {
                 ))}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', marginTop: '1.5rem' }}>
                 <div className="glass-card" style={{ padding: '1.5rem', minHeight: '350px' }}>
-                    <h3 className="mb-4 text-lg font-semibold border-b pb-2">Recent Attendance Activity</h3>
-                    <div className="flex-center h-full text-muted">
-                        <p>Activity chart will be rendered here...</p>
+                    <div className="flex-between border-b pb-4 mb-4">
+                        <h3 className="text-lg font-semibold m-0">Daily Attendance Trends</h3>
+                        <select className="input-field py-1 text-sm bg-slate-50" style={{ width: 'auto' }}>
+                            <option>This Week</option>
+                            <option>This Month</option>
+                        </select>
+                    </div>
+                    {/* Mocked Chart Area */}
+                    <div className="flex-center h-full relative" style={{ minHeight: '250px' }}>
+                        <div className="absolute bottom-0 w-full flex justify-between items-end px-4 h-48 gap-2">
+                            {[60, 80, 40, 90, 70, 50, 85].map((h, i) => (
+                                <div key={i} className="flex flex-col items-center gap-2 flex-1 group">
+                                    <div
+                                        className="w-full bg-primary-light rounded-t-sm transition-all group-hover:bg-primary-main"
+                                        style={{ height: `${h}%` }}
+                                    ></div>
+                                    <span className="text-xs text-muted font-medium">Day {i + 1}</span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
+
                 <div className="glass-card" style={{ padding: '1.5rem', minHeight: '350px' }}>
-                    <h3 className="mb-4 text-lg font-semibold border-b pb-2">Alerts & Pending Actions</h3>
-                    <div className="flex-center h-full text-muted">
-                        <p>No pending leave requests or approvals.</p>
+                    <div className="flex-between border-b pb-4 mb-4">
+                        <h3 className="text-lg font-semibold m-0">Pending Actions</h3>
+                        <span className="badge badge-warning">3 New</span>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                        <div className="p-3 rounded-lg border border-slate-100 hover:border-primary-light hover:bg-slate-50 transition-colors cursor-pointer">
+                            <h4 className="font-bold text-sm text-main mb-1">Leave Approval Pending</h4>
+                            <p className="text-xs text-muted mb-2">Jane Smith requested 2 days Sick Leave.</p>
+                            <div className="flex gap-2">
+                                <button className="btn btn-primary text-xs py-1 px-3">Review</button>
+                            </div>
+                        </div>
+
+                        <div className="p-3 rounded-lg border border-slate-100 hover:border-primary-light hover:bg-slate-50 transition-colors cursor-pointer">
+                            <h4 className="font-bold text-sm text-main mb-1">Payroll Generation Due</h4>
+                            <p className="text-xs text-muted mb-2">March salary slips need processing.</p>
+                            <div className="flex gap-2">
+                                <button className="btn btn-secondary text-xs py-1 px-3">Process Now</button>
+                            </div>
+                        </div>
+
+                        <div className="p-3 rounded-lg border border-slate-100 hover:border-primary-light hover:bg-slate-50 transition-colors cursor-pointer">
+                            <h4 className="font-bold text-sm text-main mb-1">Missing Check-outs</h4>
+                            <p className="text-xs text-muted mb-2">5 employees did not check out yesterday.</p>
+                            <div className="flex gap-2">
+                                <button className="btn btn-secondary text-xs py-1 px-3">Send Reminder</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

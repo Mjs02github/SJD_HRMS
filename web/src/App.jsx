@@ -14,6 +14,7 @@ import TaskManagement from './pages/Tasks/TaskManagement';
 import DPRViews from './pages/Tasks/DPRViews';
 import PfEsicReturns from './pages/Returns/PfEsicReturns';
 import GpsTracking from './pages/Tracking/GpsTracking';
+import Settings from './pages/Settings/Settings';
 
 // PrivateRoute wrapper for simple pages without layout (like redirect)
 const PrivateRoute = ({ children, roles }) => {
@@ -49,7 +50,7 @@ function App() {
         <Route path="pf-esic" element={<PfEsicReturns />} />
         <Route path="tasks" element={<TaskManagement />} />
         <Route path="dprs" element={<DPRViews />} />
-        <Route path="settings" element={<div className="app-content"><h2>Settings</h2></div>} />
+        <Route path="settings" element={<Settings />} />
       </Route>
 
       {/* Employee Routes */}
