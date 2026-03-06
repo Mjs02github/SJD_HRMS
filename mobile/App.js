@@ -7,6 +7,7 @@ import { View, ActivityIndicator } from 'react-native';
 
 import LoginScreen from './src/screens/Auth/LoginScreen';
 import EmployeeDashboard from './src/screens/Dashboard/EmployeeDashboard';
+import SelfieAttendanceScreen from './src/screens/Attendance/SelfieAttendanceScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,11 +57,18 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           // Authenticated Stack
-          <Stack.Screen
-            name="Dashboard"
-            component={EmployeeDashboard}
-            initialParams={{ onLogout: handleLogout }}
-          />
+          <Stack.Group>
+            <Stack.Screen
+              name="Dashboard"
+              component={EmployeeDashboard}
+              initialParams={{ onLogout: handleLogout }}
+            />
+            <Stack.Screen
+              name="SelfieAttendance"
+              component={SelfieAttendanceScreen}
+              options={{ presentation: 'fullScreenModal' }}
+            />
+          </Stack.Group>
         ) : (
           // Unauthenticated Stack
           <Stack.Screen

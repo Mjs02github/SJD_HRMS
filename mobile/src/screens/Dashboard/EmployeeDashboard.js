@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MapPin, LogOut, Clock, Calendar, CheckCircle } from 'lucide-react-native';
 
-export default function EmployeeDashboard({ route }) {
+export default function EmployeeDashboard({ route, navigation }) {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
@@ -35,8 +35,7 @@ export default function EmployeeDashboard({ route }) {
     };
 
     const markAttendanceIn = () => {
-        // Normally this would trigger GPS checking, selfie taking, then API post
-        alert('Attendance IN logic will trigger camera and GPS');
+        navigation.navigate('SelfieAttendance');
     };
 
     if (!userData) {
