@@ -7,6 +7,8 @@ import EmployeeDashboard from './pages/EmployeeDashboard';
 import AdminLayout from './components/AdminLayout';
 import AdminDashboard from './pages/AdminDashboard';
 import EmployeeList from './pages/Employees/EmployeeList';
+import AttendanceReport from './pages/Attendance/AttendanceReport';
+import LeaveManagement from './pages/Attendance/LeaveManagement';
 
 // PrivateRoute wrapper for simple pages without layout (like redirect)
 const PrivateRoute = ({ children, roles }) => {
@@ -35,9 +37,9 @@ function App() {
         <Route path="companies" element={<div className="app-content"><h2>Companies Management</h2></div>} />
         {/* Real routes */}
         <Route path="employees" element={<EmployeeList />} />
-        <Route path="attendance" element={<div className="app-content"><h2>Attendance Management</h2></div>} />
+        <Route path="attendance" element={<AttendanceReport />} />
         <Route path="gps" element={<div className="app-content"><h2>GPS Tracking</h2></div>} />
-        <Route path="leaves" element={<div className="app-content"><h2>Leave Management</h2></div>} />
+        <Route path="leaves" element={<LeaveManagement />} />
         <Route path="payroll" element={<div className="app-content"><h2>Payroll Processing</h2></div>} />
         <Route path="pf-esic" element={<div className="app-content"><h2>PF & ESIC Returns</h2></div>} />
         <Route path="tasks" element={<div className="app-content"><h2>Task Management</h2></div>} />
