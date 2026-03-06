@@ -4,27 +4,10 @@ import { useAuth } from './contexts/AuthContext';
 import Login from './pages/Login';
 import EmployeeDashboard from './pages/EmployeeDashboard';
 
-// Placeholder views for components not yet built
-const AdminDashboard = () => <div className="app-content"><h2>Admin Dashboard</h2><p>Overview stats will go here</p></div>;
-const Layout = ({ children }) => (
-  <div className="app-layout">
-    <aside className="app-sidebar">
-      {/* Sidebar navigation here */}
-      <div style={{ padding: '2rem' }}>
-        <h2 className="text-gradient">SJD HRMS</h2>
-      </div>
-    </aside>
-    <main className="app-main">
-      <header className="app-header">
-        <div>{/* Company Switcher will go here for admins */}</div>
-        <div>{/* Profile menu */}</div>
-      </header>
-      {children}
-    </main>
-  </div>
-);
+import AdminLayout from './components/AdminLayout';
+import AdminDashboard from './pages/AdminDashboard';
 
-// PrivateRoute wrapper
+// PrivateRoute wrapper for simple pages without layout (like redirect)
 const PrivateRoute = ({ children, roles }) => {
   const { user, loading } = useAuth();
 
@@ -32,7 +15,7 @@ const PrivateRoute = ({ children, roles }) => {
   if (!user) return <Navigate to="/login" replace />;
   if (roles && !roles.includes(user.role)) return <Navigate to="/" replace />;
 
-  return <Layout>{children}</Layout>;
+  return children;
 };
 
 function App() {
@@ -40,12 +23,25 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login />} />
 
-      {/* Admin/HR Routes */}
+      {/* Admin/HR Routes inside AdminLayout */}
       <Route path="/admin" element={
         <PrivateRoute roles={['super_admin', 'hr', 'manager']}>
-          <AdminDashboard />
+          <AdminLayout />
         </PrivateRoute>
-      } />
+      }>
+        <Route index element={<AdminDashboard />} />
+        {/* Placeholder routes for future development */}
+        <Route path="companies" element={<div className="app-content"><h2>Companies Management</h2></div>} />
+        <Route path="employees" element={<div className="app-content"><h2>Employee Management</h2></div>} />
+        <Route path="attendance" element={<div className="app-content"><h2>Attendance Management</h2></div>} />
+        <Route path="gps" element={<div className="app-content"><h2>GPS Tracking</h2></div>} />
+        <Route path="leaves" element={<div className="app-content"><h2>Leave Management</h2></div>} />
+        <Route path="payroll" element={<div className="app-content"><h2>Payroll Processing</h2></div>} />
+        <Route path="pf-esic" element={<div className="app-content"><h2>PF & ESIC Returns</h2></div>} />
+        <Route path="tasks" element={<div className="app-content"><h2>Task Management</h2></div>} />
+        <Route path="dprs" element={<div className="app-content"><h2>Daily Progress Reports</h2></div>} />
+        <Route path="settings" element={<div className="app-content"><h2>Settings</h2></div>} />
+      </Route>
 
       {/* Employee Routes */}
       <Route path="/employee" element={
