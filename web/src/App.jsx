@@ -6,6 +6,7 @@ import EmployeeDashboard from './pages/EmployeeDashboard';
 
 import AdminLayout from './components/AdminLayout';
 import AdminDashboard from './pages/AdminDashboard';
+import EmployeeList from './pages/Employees/EmployeeList';
 
 // PrivateRoute wrapper for simple pages without layout (like redirect)
 const PrivateRoute = ({ children, roles }) => {
@@ -32,7 +33,8 @@ function App() {
         <Route index element={<AdminDashboard />} />
         {/* Placeholder routes for future development */}
         <Route path="companies" element={<div className="app-content"><h2>Companies Management</h2></div>} />
-        <Route path="employees" element={<div className="app-content"><h2>Employee Management</h2></div>} />
+        {/* Real routes */}
+        <Route path="employees" element={<EmployeeList />} />
         <Route path="attendance" element={<div className="app-content"><h2>Attendance Management</h2></div>} />
         <Route path="gps" element={<div className="app-content"><h2>GPS Tracking</h2></div>} />
         <Route path="leaves" element={<div className="app-content"><h2>Leave Management</h2></div>} />
