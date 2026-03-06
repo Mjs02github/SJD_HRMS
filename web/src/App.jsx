@@ -12,6 +12,8 @@ import LeaveManagement from './pages/Attendance/LeaveManagement';
 import PayrollProcessing from './pages/Payroll/PayrollProcessing';
 import TaskManagement from './pages/Tasks/TaskManagement';
 import DPRViews from './pages/Tasks/DPRViews';
+import PfEsicReturns from './pages/Returns/PfEsicReturns';
+import GpsTracking from './pages/Tracking/GpsTracking';
 
 // PrivateRoute wrapper for simple pages without layout (like redirect)
 const PrivateRoute = ({ children, roles }) => {
@@ -41,10 +43,10 @@ function App() {
         {/* Real routes */}
         <Route path="employees" element={<EmployeeList />} />
         <Route path="attendance" element={<AttendanceReport />} />
-        <Route path="gps" element={<div className="app-content"><h2>GPS Tracking</h2></div>} />
+        <Route path="gps" element={<GpsTracking />} />
         <Route path="leaves" element={<LeaveManagement />} />
         <Route path="payroll" element={<PayrollProcessing />} />
-        <Route path="pf-esic" element={<div className="app-content"><h2>PF & ESIC Returns</h2></div>} />
+        <Route path="pf-esic" element={<PfEsicReturns />} />
         <Route path="tasks" element={<TaskManagement />} />
         <Route path="dprs" element={<DPRViews />} />
         <Route path="settings" element={<div className="app-content"><h2>Settings</h2></div>} />
