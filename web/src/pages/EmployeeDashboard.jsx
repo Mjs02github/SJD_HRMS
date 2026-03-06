@@ -66,17 +66,6 @@ export default function EmployeeDashboard() {
                 </div>
             </div>
 
-            {/* GPS Tracking Disclosure Banner */}
-            <div className="glass-card mb-6" style={{ padding: '1rem 1.5rem', borderLeft: '4px solid var(--info-main)', display: 'flex', alignItems: 'flex-start', gap: '1rem', backgroundColor: 'rgba(59, 130, 246, 0.05)' }}>
-                <Clock className="text-info mt-1" size={20} />
-                <div>
-                    <h3 className="title-sm m-0 text-info" style={{ fontSize: '1rem', fontWeight: 600 }}>Location Tracking Active</h3>
-                    <p className="text-sm text-secondary mt-1">
-                        Please note: For field safety and attendance compliance, your GPS location will be <strong>silently tracked in the background</strong> during your active working hours after you mark your attendance IN. Tracking automatically stops when you mark your attendance OUT.
-                    </p>
-                </div>
-            </div>
-
             <div className="dashboard-grid">
                 {/* 1. Monthly Attendance */}
                 <div className="glass-card stat-card">
