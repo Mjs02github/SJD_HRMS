@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, ActivityIndicator } from 'react-native';
 
 import LoginScreen from './src/screens/Auth/LoginScreen';
 import EmployeeDashboard from './src/screens/Dashboard/EmployeeDashboard';
@@ -15,32 +16,59 @@ export default function App() {
 
   // Check if user is already logged in on mount
   useEffect(() => {
-    const checkToken = async () => {
-      try {
-        const token = await AsyncStorage.getItem('userToken');
-        if (token) {
-          setIsAuthenticated(true);
-        }
-      } catch (e) {
-        console.error("Error reading token");
-      } finally {
-        setIsLoading(false);
-      }
-    };
     checkToken();
   }, []);
 
+  const checkToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        setIsAuthenticated(true);
+      }
+    } catch (e) {
+      console.error("Error reading token", e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('userToken');
+    await AsyncStorage.removeItem('userData');
+    setIsAuthenticated(false);
+  };
+
   if (isLoading) {
-    return null; // or a Splash screen
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0F172A' }}>
+        <ActivityIndicator size="large" color="#38BDF8" />
+      </View>
+    );
   }
 
   return (
     <NavigationContainer>
-      <StatusBar style="auto" />
+      <StatusBar style={isAuthenticated ? "dark" : "light"} />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* We will route based on authentication state late, for now we will just show Login first then Dashboard */}
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Dashboard" component={EmployeeDashboard} />
+        {isAuthenticated ? (
+          // Authenticated Stack
+          <Stack.Screen
+            name="Dashboard"
+            component={EmployeeDashboard}
+            initialParams={{ onLogout: handleLogout }}
+          />
+        ) : (
+          // Unauthenticated Stack
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            initialParams={{ onLoginSuccess: handleLoginSuccess }}
+          />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
