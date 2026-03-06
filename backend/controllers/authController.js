@@ -142,4 +142,59 @@ const changePassword = async (req, res) => {
     }
 };
 
-module.exports = { login, register, getMe, changePassword };
+// POST /api/auth/employee-login
+const employeeLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'Email/Employee Code and password are required' });
+        }
+
+        // Allow login by email or emp_code
+        const result = await pool.query(
+            `SELECT * FROM employees WHERE (email = $1 OR emp_code = $1) AND status = 'active'`,
+            [email.toLowerCase()]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        }
+
+        const employee = result.rows[0];
+
+        if (!employee.password) {
+            return res.status(401).json({ success: false, message: 'Password not set. Contact HR.' });
+        }
+
+        const isMatch = await bcrypt.compare(password, employee.password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        }
+
+        const token = jwt.sign(
+            { id: employee.id, email: employee.email, role: 'employee', company_id: employee.company_id, name: employee.name },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN || '30d' }
+        );
+
+        res.json({
+            success: true,
+            message: 'Login successful',
+            token,
+            user: {
+                id: employee.id,
+                name: employee.name,
+                email: employee.email,
+                role: 'employee',
+                company_id: employee.company_id,
+                emp_code: employee.emp_code
+            },
+        });
+    } catch (err) {
+        console.error('Employee login error:', err);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+}
+
+module.exports = { login, register, getMe, changePassword, employeeLogin };

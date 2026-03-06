@@ -55,7 +55,7 @@ const getEmployee = async (req, res) => {
 const createEmployee = async (req, res) => {
     try {
         const {
-            emp_code, name, email, phone, dept_id, designation_id, manager_id,
+            emp_code, password, name, email, phone, dept_id, designation_id, manager_id,
             doj, basic_salary, gross_salary, pf_applicable = true, esic_applicable = true,
             uan_no, esic_no, aadhar_no, pan_no, bank_account, bank_ifsc, bank_name
         } = req.body;
@@ -64,15 +64,18 @@ const createEmployee = async (req, res) => {
             return res.status(400).json({ success: false, message: 'emp_code and name are required' });
         }
 
+        const bcrypt = require('bcryptjs');
+        const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
+
         const result = await pool.query(
             `INSERT INTO employees(
-        company_id, emp_code, name, email, phone, dept_id, designation_id, manager_id,
+        company_id, emp_code, password, name, email, phone, dept_id, designation_id, manager_id,
         doj, basic_salary, gross_salary, pf_applicable, esic_applicable,
         uan_no, esic_no, aadhar_no, pan_no, bank_account, bank_ifsc, bank_name
-      ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)
+      ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
       RETURNING *`,
             [
-                req.companyId, emp_code, name, email, phone, dept_id, designation_id, manager_id,
+                req.companyId, emp_code, hashedPassword, name, email, phone, dept_id, designation_id, manager_id,
                 doj, basic_salary, gross_salary, pf_applicable, esic_applicable,
                 uan_no, esic_no, aadhar_no, pan_no, bank_account, bank_ifsc, bank_name
             ]
@@ -91,26 +94,37 @@ const createEmployee = async (req, res) => {
 const updateEmployee = async (req, res) => {
     try {
         const {
-            name, email, phone, dept_id, designation_id, manager_id, doj,
+            name, email, phone, password, dept_id, designation_id, manager_id, doj,
             basic_salary, gross_salary, pf_applicable, esic_applicable,
             uan_no, esic_no, aadhar_no, pan_no, bank_account, bank_ifsc, bank_name,
             profile_photo_url, status
         } = req.body;
 
-        const result = await pool.query(
-            `UPDATE employees SET
+        let query = `UPDATE employees SET
         name=$1, email=$2, phone=$3, dept_id=$4, designation_id=$5, manager_id=$6, doj=$7,
         basic_salary=$8, gross_salary=$9, pf_applicable=$10, esic_applicable=$11,
         uan_no=$12, esic_no=$13, aadhar_no=$14, pan_no=$15, bank_account=$16,
-        bank_ifsc=$17, bank_name=$18, profile_photo_url=$19, status=$20
-       WHERE id=$21 AND company_id=$22 RETURNING *`,
-            [
-                name, email, phone, dept_id, designation_id, manager_id, doj,
-                basic_salary, gross_salary, pf_applicable, esic_applicable,
-                uan_no, esic_no, aadhar_no, pan_no, bank_account, bank_ifsc, bank_name,
-                profile_photo_url, status, req.params.id, req.companyId
-            ]
-        );
+        bank_ifsc=$17, bank_name=$18, profile_photo_url=$19, status=$20`;
+        const params = [
+            name, email, phone, dept_id, designation_id, manager_id, doj,
+            basic_salary, gross_salary, pf_applicable, esic_applicable,
+            uan_no, esic_no, aadhar_no, pan_no, bank_account, bank_ifsc, bank_name,
+            profile_photo_url, status
+        ];
+
+        let offset = 21;
+        if (password) {
+            const bcrypt = require('bcryptjs');
+            const hashedPassword = await bcrypt.hash(password, 10);
+            query += `, password=$${offset}`;
+            params.push(hashedPassword);
+            offset++;
+        }
+
+        query += ` WHERE id=$${offset} AND company_id=$${offset + 1} RETURNING *`;
+        params.push(req.params.id, req.companyId);
+
+        const result = await pool.query(query, params);
         if (result.rowCount === 0) return res.status(404).json({ success: false, message: 'Employee not found' });
         res.json({ success: true, message: 'Employee updated', data: result.rows[0] });
     } catch (err) {

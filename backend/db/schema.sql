@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS employees (
   id               SERIAL PRIMARY KEY,
   company_id       INT NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
   emp_code         VARCHAR(30) NOT NULL,
+  password         VARCHAR(255),
   name             VARCHAR(150) NOT NULL,
   email            VARCHAR(100),
   phone            VARCHAR(20),
